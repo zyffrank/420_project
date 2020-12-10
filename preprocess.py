@@ -13,7 +13,7 @@ def makeDataSet(path, label):
         img = cv.imread(file, cv.IMREAD_GRAYSCALE)
         images.append(img)
         labels.append(label)
-    return np.array(images, dtype = 'uint8'), np.array(labels, dtype = 'int64')
+    return np.array(images), np.array(labels)
 
 def createDataSet():
     lists = ['anger', 'disgust', 'fear', 'happy', 'sadness', 'surprise', 'contempt']
