@@ -70,7 +70,7 @@ def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion
     return model, loss
 
 def final_test(model):
-    test_set = TestDataLoader(val_images, val_labels)
+    test_set = TestDataLoader(test_images, test_labels)
     test_loader = torch.utils.data.DataLoader(test_set)
     criterion = nn.CrossEntropyLoss()
     accuracy = 0
@@ -111,8 +111,8 @@ if __name__ == '__main__':
     #https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
     train_images = np.load('./numpy_data/train_images.npy')
     train_labels = np.load('./numpy_data/train_labels.npy')
-    val_images = np.load('./numpy_data/val_images.npy')
-    val_labels = np.load('./numpy_data/val_labels.npy')
+    test_images = np.load('./numpy_data/test_images.npy')
+    test_labels = np.load('./numpy_data/test_labels.npy')
 
     num_epochs = 10
     learning_rate = 0.0001
