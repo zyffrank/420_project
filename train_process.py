@@ -12,20 +12,18 @@ def train(epoch, num_epochs, optimizer, trainloader, model, criterion):
     running_loss = 0
     accuracy = 0
     for images, labels in trainloader:
-        print(labels)
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-        ps = torch.exp(outputs)
-        top_p, top_class = ps.topk(1, dim=1)
-        equals = top_class == labels.view(*top_class.shape)
-        accuracy += torch.mean(equals.type(torch.FloatTensor))
+        top_class = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, top_class).type(torch.FloatTensor)
+        accuracy += torch.mean(equals)
         running_loss += loss.item()
     train_acc = accuracy / len(trainloader)
-    print('Training: Epoch [%d/%d] Loss: %.4f, Accuracy: %.4f' % (
-        epoch + 1, num_epochs, running_loss / len(trainloader), train_acc))
+    print('Training: Epoch %d Loss: %.4f, Accuracy: %.4f' % (
+        epoch + 1, running_loss / len(trainloader), train_acc))
     return model, running_loss / len(trainloader)
 
 
@@ -34,12 +32,10 @@ def validation_process(criterion, testloader, model):
     running_loss = 0
     for images, labels in testloader:
         outputs = model(images)
-        print(outputs)
         loss = criterion(outputs, labels)
-        ps = torch.exp(outputs)
-        top_p, top_class = ps.topk(1, dim=1)
-        equals = top_class == labels.view(*top_class.shape)
-        accuracy += torch.mean(equals.type(torch.FloatTensor))
+        top_class = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, top_class).type(torch.FloatTensor)
+        accuracy += torch.mean(equals)
         running_loss += loss.item()
     val_loss = running_loss / len(testloader)
     val_acc = accuracy / len(testloader)
@@ -49,7 +45,7 @@ def validation_process(criterion, testloader, model):
 
 def mainLoop(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     optimizer = torch.optim.Adam(model.parameters(), lr=learn_rate)
-    best_loss = 1e10
+    best_loss = float('inf')
     best_model = None
     loss_list_train = []
     loss_list_test = []
@@ -58,15 +54,15 @@ def mainLoop(model, num_epochs, learn_rate, trainloader, testloader, criterion):
         model, loss = train(epoch, num_epochs, optimizer, trainloader, model, criterion)
         model.eval()
         val_acc, val_loss, _ = validation_process(criterion, testloader, model)
-        print('Validation: Epoch [%d/%d], Val Loss: %.4f, Accuracy: %.4f' % (
-            epoch + 1, num_epochs, val_loss, val_acc))
+        print('Validation: Epoch %d, Val Loss: %.4f, Accuracy: %.4f' % (
+            epoch + 1, val_loss, val_acc))
         epoch_loss = val_loss
         loss_list_train += [loss]
         loss_list_test += [epoch_loss]
-        if epoch_loss < best_loss:
-            print("Saving best model")
-            best_loss = epoch_loss
-            best_model = model
+        # if epoch_loss < best_loss:
+        #     print("Saving best model")
+        #     best_loss = epoch_loss
+        #     best_model = model
     train1, = plt.plot(epoch_list,[item + 1 for item in loss_list_train],  label = "train_loss")
     validation,  = plt.plot(epoch_list,[item + 1 for item in loss_list_test],  label = "validation loss")
     plt.xlabel('Epoch')
@@ -82,14 +78,11 @@ def final_test(model):
     accuracy = 0
     running_loss = 0
     for images, labels in test_loader:
-
         outputs = model(images)
-        print(outputs)
         loss = criterion(outputs, labels)
-        ps = torch.exp(outputs)
-        top_p, top_class = ps.topk(1, dim=1)
-        equals = top_class == labels.view(*top_class.shape)
-        accuracy += torch.mean(equals.type(torch.FloatTensor))
+        top_class = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, top_class).type(torch.FloatTensor)
+        accuracy += torch.mean(equals)
         running_loss += loss.item()
     accuracy /= len(test_loader)
     print("test accuracy")
@@ -116,6 +109,7 @@ if __name__ == '__main__':
 
     model = ConvNet()
     print(model)
+
     #https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
     train_pixels = np.load('./numpy_data/train_images.npy')
     train_labels = np.load('./numpy_data/train_labels.npy')
