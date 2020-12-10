@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 
 
-def train(epoch, num_epochs, optimizer, trainloader, model, criterion):
+def train(epoch, optimizer, trainloader, model, criterion):
     model.train()
     running_loss = 0
     accuracy = 0
@@ -115,6 +115,7 @@ if __name__ == '__main__':
     train_labels = np.load('./numpy_data/train_labels.npy')
     val_pixels = np.load('./numpy_data/val_images.npy')
     val_labels = np.load('./numpy_data/val_labels.npy')
+
     num_epochs = 20
     train_batch_size = 128
     test_batch_size=20
