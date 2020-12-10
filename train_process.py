@@ -43,10 +43,8 @@ def validation_process(criterion, testloader, model):
     return val_acc, val_loss, outputs
 
 
-def mainLoop(model, num_epochs, learn_rate, trainloader, testloader, criterion):
+def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     optimizer = torch.optim.Adam(model.parameters(), lr=learn_rate)
-    best_loss = float('inf')
-    best_model = None
     loss_list_train = []
     loss_list_test = []
     epoch_list = range(1,num_epochs+1)
@@ -89,7 +87,7 @@ def final_test(model):
     print(accuracy)
 
 
-def train_model():
+def kfolder():
     models_store = []
     for i in range(fold_num):
         print("%dth fold" % (i+1))
@@ -97,7 +95,7 @@ def train_model():
         val_set = TestLoader(train_pixels , train_labels, i)
         trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
         testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
-        model, test_loss = mainLoop(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
+        model, test_loss = eachfolder(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
         final_test(model)
         models_store.append(model)
     return models_store
@@ -121,4 +119,4 @@ if __name__ == '__main__':
     fold_num = 1
 
 
-    models_store = train_model()
+    models_store = kfolder()
