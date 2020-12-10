@@ -91,13 +91,13 @@ def final_test(model):
 
 def train_model():
     models_store = []
-    for i in range(k_fold):
+    for i in range(fold_num):
         print("%dth fold" % (i+1))
         train_set = TrainLoader(train_pixels , train_labels, i)
         val_set = TestLoader(train_pixels , train_labels, i)
-        trainloader = torch.utils.data.DataLoader(train_set, batch_size=train_batch_size, shuffle=True)
-        testloader = torch.utils.data.DataLoader(val_set, batch_size=test_batch_size, shuffle=True)
-        model, test_loss = mainLoop(ConvNet(), num_epochs, learn_rate, trainloader, testloader, nn.CrossEntropyLoss())
+        trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
+        testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
+        model, test_loss = mainLoop(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
         final_test(model)
         models_store.append(model)
     return models_store
@@ -116,11 +116,9 @@ if __name__ == '__main__':
     val_pixels = np.load('./numpy_data/val_images.npy')
     val_labels = np.load('./numpy_data/val_labels.npy')
 
-    num_epochs = 20
-    train_batch_size = 128
-    test_batch_size=20
-    learn_rate = 0.001
-    k_fold = 1
+    num_epochs = 10
+    learning_rate = 0.0001
+    fold_num = 1
 
 
     models_store = train_model()

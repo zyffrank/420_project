@@ -13,7 +13,7 @@ def detect_face(path, cas_model):
             break
 
         img = cv2.GaussianBlur(img, (9, 9), 0)
-        img = cv2.resize(img, (48, 48))
+        img = cv2.resize(img, (50, 50))
         save_path = file.replace('CK+', 'CK+small')
         Image.fromarray(img, 'L').save(save_path)
 
@@ -38,11 +38,18 @@ if __name__ == '__main__':
     surprise_path = os.path.join(dir, 'surprise')
     contempt_path = os.path.join(dir, 'contempt')
 
+    print("processing anger")
     detect_face(anger_path, face_cascade)
+    print("processing contempt")
     detect_face(contempt_path, face_cascade)
+    print("processing disgust")
     detect_face(disgust_path, face_cascade)
+    print("processing fear")
     detect_face(fear_path, face_cascade)
+    print("processing happy")
     detect_face(happy_path, face_cascade)
+    print("processing sadness")
     detect_face(sadness_path, face_cascade)
+    print("processing surprise")
     detect_face(surprise_path, face_cascade)
 
