@@ -52,7 +52,7 @@ def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion
         model, loss = train(epoch, optimizer, trainloader, model, criterion)
         model.eval()
         val_acc, val_loss, _ = validation_process(criterion, testloader, model)
-        print('Validation: Epoch %d, Val Loss: %.4f, Accuracy: %.4f' % (
+        print('Validation: Epoch %d, Loss: %.4f, Accuracy: %.4f' % (
             epoch + 1, val_loss, val_acc))
         epoch_loss = val_loss
         loss_list_train += [loss]
