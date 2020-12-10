@@ -69,7 +69,7 @@ def mainLoop(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     plt.ylabel('Loss')
     plt.legend([train1, validation], ['Loss of training process', 'Loss of validation process'])
     plt.show()
-    return best_model, best_loss
+    return model, loss
 
 def final_test(model):
     test_set = TestDataLoader(val_pixels, val_labels)
