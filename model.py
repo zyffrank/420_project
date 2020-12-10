@@ -14,6 +14,7 @@ class ConvNet(nn.Module):
         self.drop_out = nn.Dropout()
         self.fc1 = nn.Linear(9216, 1000)
         self.fc2 = nn.Linear(1000, 7)
+        self.soft = nn.Softmax(dim = 1)
 
     def forward(self, x):
         out = self.layer1(x)
@@ -21,4 +22,5 @@ class ConvNet(nn.Module):
         out = out.view(out.size(0), -1)
         out = self.fc1(out)
         out = self.fc2(out)
+        out = self.soft(out)
         return out
