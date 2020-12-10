@@ -70,7 +70,7 @@ def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion
     return model, loss
 
 def final_test(model):
-    test_set = TestDataLoader(val_pixels, val_labels)
+    test_set = TestDataLoader(val_images, val_labels)
     test_loader = torch.utils.data.DataLoader(test_set)
     criterion = nn.CrossEntropyLoss()
     accuracy = 0
@@ -91,8 +91,8 @@ def kfolder():
     models_store = []
     for i in range(fold_num):
         print("%dth fold" % (i+1))
-        train_set = TrainLoader(train_pixels , train_labels, i)
-        val_set = TestLoader(train_pixels , train_labels, i)
+        train_set = TrainLoader(train_images , train_labels, i)
+        val_set = TestLoader(train_images , train_labels, i)
         trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
         testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
         model, test_loss = eachfolder(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
@@ -109,9 +109,9 @@ if __name__ == '__main__':
     print(model)
 
     #https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
-    train_pixels = np.load('./numpy_data/train_images.npy')
+    train_images = np.load('./numpy_data/train_images.npy')
     train_labels = np.load('./numpy_data/train_labels.npy')
-    val_pixels = np.load('./numpy_data/val_images.npy')
+    val_images = np.load('./numpy_data/val_images.npy')
     val_labels = np.load('./numpy_data/val_labels.npy')
 
     num_epochs = 10
