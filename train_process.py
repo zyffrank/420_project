@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
-from model import ResCNN, ConvNet
+from model import ConvNet
 from data_loader import TrainLoader, TestDataLoader, TestLoader
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
@@ -17,8 +17,8 @@ def train(epoch, optimizer, trainloader, model, criterion):
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-        top_class = torch.argmax(outputs, dim = 1)
-        equals = torch.eq(labels, top_class).type(torch.FloatTensor)
+        predict_label = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
         accuracy += torch.mean(equals)
         running_loss += loss.item()
     train_acc = accuracy / len(trainloader)
@@ -33,8 +33,8 @@ def validation_process(criterion, testloader, model):
     for images, labels in testloader:
         outputs = model(images)
         loss = criterion(outputs, labels)
-        top_class = torch.argmax(outputs, dim = 1)
-        equals = torch.eq(labels, top_class).type(torch.FloatTensor)
+        predict_label = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
         accuracy += torch.mean(equals)
         running_loss += loss.item()
     val_loss = running_loss / len(testloader)
@@ -51,7 +51,7 @@ def mainLoop(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     loss_list_test = []
     epoch_list = range(1,num_epochs+1)
     for epoch in range(num_epochs):
-        model, loss = train(epoch, num_epochs, optimizer, trainloader, model, criterion)
+        model, loss = train(epoch, optimizer, trainloader, model, criterion)
         model.eval()
         val_acc, val_loss, _ = validation_process(criterion, testloader, model)
         print('Validation: Epoch %d, Val Loss: %.4f, Accuracy: %.4f' % (
@@ -80,8 +80,8 @@ def final_test(model):
     for images, labels in test_loader:
         outputs = model(images)
         loss = criterion(outputs, labels)
-        top_class = torch.argmax(outputs, dim = 1)
-        equals = torch.eq(labels, top_class).type(torch.FloatTensor)
+        predict_label = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
         accuracy += torch.mean(equals)
         running_loss += loss.item()
     accuracy /= len(test_loader)
