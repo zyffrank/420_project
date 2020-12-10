@@ -7,7 +7,9 @@ def detect_face(path, cas_model):
     path = path + '/*.png'
     for file in glob.glob(path):
         img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
-        faces = cas_model.detectMultiScale(img, 1.3, 3)
+        faces = cas_model.detectMultiScale(img)
+        # scaleFactor: Parameter specifying how much the image size is reduced at each image scale.
+        # Parameter specifying how many neighbors each candidate rectangle should have to retain it
         for (x, y, w, h) in faces:
             img = img[y:y + h, x:x + w]
             break
