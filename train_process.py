@@ -29,7 +29,7 @@ def train(epoch, num_epochs, optimizer, trainloader, model, criterion):
     return model, running_loss / len(trainloader)
 
 
-def runValidation(criterion, testloader, model):
+def validation_process(criterion, testloader, model):
     accuracy = 0
     running_loss = 0
     for images, labels in testloader:
@@ -57,8 +57,8 @@ def mainLoop(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     for epoch in range(num_epochs):
         model, loss = train(epoch, num_epochs, optimizer, trainloader, model, criterion)
         model.eval()
-        val_acc, val_loss, _ = runValidation(criterion, testloader, model)
-        print('Testing: Epoch [%d/%d], Val Loss: %.4f, Accuracy: %.4f' % (
+        val_acc, val_loss, _ = validation_process(criterion, testloader, model)
+        print('Validation: Epoch [%d/%d], Val Loss: %.4f, Accuracy: %.4f' % (
             epoch + 1, num_epochs, val_loss, val_acc))
         epoch_loss = val_loss
         loss_list_train += [loss]
@@ -117,10 +117,10 @@ if __name__ == '__main__':
     model = ConvNet()
     print(model)
     #https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
-    train_pixels = np.load('./numpy_data/train_imgs_data.npy')
-    train_labels = np.load('./numpy_data/train_labels_data.npy')
-    val_pixels = np.load('./numpy_data/val_imgs_data.npy')
-    val_labels = np.load('./numpy_data/val_labels_data.npy')
+    train_pixels = np.load('./numpy_data/train_images.npy')
+    train_labels = np.load('./numpy_data/train_labels.npy')
+    val_pixels = np.load('./numpy_data/val_images.npy')
+    val_labels = np.load('./numpy_data/val_labels.npy')
     num_epochs = 20
     train_batch_size = 128
     test_batch_size=20

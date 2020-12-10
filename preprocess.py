@@ -41,10 +41,10 @@ def saveNumpys(train_imgs_data, train_labels_data, val_imgs_data, val_labels_dat
     if not os.path.exists('./numpy_data'):
         os.makedirs('./numpy_data')
 
-    np.save('./numpy_data/train_imgs_data.npy', train_imgs_data)
-    np.save('./numpy_data/train_labels_data.npy', train_labels_data)
-    np.save('./numpy_data/val_imgs_data.npy', val_imgs_data)
-    np.save('./numpy_data/val_labels_data.npy', val_labels_data)
+    np.save('./numpy_data/train_images.npy', train_imgs_data)
+    np.save('./numpy_data/train_labels.npy', train_labels_data)
+    np.save('./numpy_data/val_images.npy', val_imgs_data)
+    np.save('./numpy_data/val_labels.npy', val_labels_data)
 
 
 
