@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from model import ResCNN, ConvNet
-from kfoldDataLoader_ck import TrainLoader, TestDataLoader, TestLoader
+from data_loader import TrainLoader, TestDataLoader, TestLoader
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 
