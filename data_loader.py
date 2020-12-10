@@ -1,4 +1,4 @@
-import numpy as np#kdcnjdncjedn
+import numpy as np
 from torch.utils.data import Dataset
 from torchvision import transforms
 
