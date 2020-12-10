@@ -57,10 +57,6 @@ def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion
         epoch_loss = val_loss
         loss_list_train += [loss]
         loss_list_test += [epoch_loss]
-        # if epoch_loss < best_loss:
-        #     print("Saving best model")
-        #     best_loss = epoch_loss
-        #     best_model = model
     train1, = plt.plot(epoch_list,[item + 1 for item in loss_list_train],  label = "train_loss")
     validation,  = plt.plot(epoch_list,[item + 1 for item in loss_list_test],  label = "validation loss")
     plt.xlabel('Epoch')
@@ -68,6 +64,7 @@ def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion
     plt.legend([train1, validation], ['Loss of training process', 'Loss of validation process'])
     plt.show()
     return model, loss
+
 
 def final_test(model):
     test_set = TestDataLoader(test_images, test_labels)
@@ -101,10 +98,7 @@ def kfolder():
     return models_store
 
 
-
-
 if __name__ == '__main__':
-
     model = ConvNet()
     print(model)
 
