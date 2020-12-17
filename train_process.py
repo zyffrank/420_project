@@ -44,6 +44,7 @@ def validation_process(criterion, testloader, model):
 
     return accuracy, loss
 
+
 # Loop over each epoch and generate graph
 def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     optimizer = torch.optim.Adam(model.parameters(), lr=learn_rate)
@@ -76,6 +77,7 @@ def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     plt.legend([train1, validation], ['Accuracy of training process', 'Accuracy of validation process'])
     plt.show()
     return model, loss
+
 
 # Test our trained model on test data
 def final_test(model):
@@ -113,15 +115,13 @@ def prepare():
 
 
 if __name__ == '__main__':
-
-    #https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+    # https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
     train_images = np.load('./numpy/train_images.npy')
     train_labels = np.load('./numpy/train_labels.npy')
     test_images = np.load('./numpy/test_images.npy')
     test_labels = np.load('./numpy/test_labels.npy')
 
     num_epochs = 40
-    learning_rate = 0.0001
-
+    learning_rate = 0.0002
 
     models_store = prepare()

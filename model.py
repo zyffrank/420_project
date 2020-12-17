@@ -1,5 +1,6 @@
 import torch.nn as nn
 
+
 # Simple convolutional neural network
 class ConvNet(nn.Module):
     def __init__(self):
@@ -40,6 +41,7 @@ class ConvNet(nn.Module):
         out = self.linear2(out)
         out = self.soft(out)
         return out
+
 
 # Main block of our residual networks
 class ResidualBlockAdd(nn.Module):

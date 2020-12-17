@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import dlib
 
+
 # Face detection method, use Haar or HoG
 def detect_face(path, cas_model):
     path = path + '/*.png'
