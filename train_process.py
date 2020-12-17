@@ -10,39 +10,39 @@ import matplotlib.pyplot as plt
 # Main training process
 def train(epoch, optimizer, trainloader, model, criterion):
     model.train()
-    running_loss = 0
-    accuracy = 0
+    total_loss = 0
+    total_right = 0
     for images, labels in trainloader:
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-        predict_label = torch.argmax(outputs, dim = 1)
-        equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
-        accuracy += torch.mean(equals)
-        running_loss += loss.item()
-    train_acc = accuracy / len(trainloader)
+        predict = torch.argmax(outputs, dim = 1)
+        equals = torch.eq(labels, predict).type(torch.FloatTensor)
+        total_right += torch.mean(equals)
+        total_loss += loss.item()
+    accuracy = total_right / len(trainloader)
     print('Training: Epoch %d Loss: %.4f, Accuracy: %.4f' % (
-        epoch + 1, running_loss / len(trainloader), train_acc))
-    return model, running_loss / len(trainloader), train_acc
+        epoch + 1, total_loss / len(trainloader), accuracy))
+    return model, total_loss / len(trainloader), accuracy
 
 
 # Validation process
 def validation_process(criterion, testloader, model):
-    accuracy = 0
-    running_loss = 0
+    total_right = 0
+    total_loss = 0
     for images, labels in testloader:
         outputs = model(images)
         loss = criterion(outputs, labels)
         predict_label = torch.argmax(outputs, dim = 1)
         equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
-        accuracy += torch.mean(equals)
-        running_loss += loss.item()
-    val_loss = running_loss / len(testloader)
-    val_acc = accuracy / len(testloader)
+        total_right += torch.mean(equals)
+        total_loss += loss.item()
+    loss = total_loss / len(testloader)
+    accuracy = total_right / len(testloader)
 
-    return val_acc, val_loss, outputs
+    return accuracy, loss
 
 # Loop over each epoch and generate graph
 def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
@@ -55,7 +55,7 @@ def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     for epoch in range(num_epochs):
         model, loss, acc = train(epoch, optimizer, trainloader, model, criterion)
         model.eval()
-        val_acc, val_loss, _ = validation_process(criterion, testloader, model)
+        val_acc, val_loss= validation_process(criterion, testloader, model)
         print('Validation: Epoch %d, Loss: %.4f, Accuracy: %.4f' % (
             epoch + 1, val_loss, val_acc))
         epoch_loss = val_loss
