@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 
 
-
+# Main training process
 def train(epoch, optimizer, trainloader, model, criterion):
     model.train()
     running_loss = 0
@@ -28,6 +28,7 @@ def train(epoch, optimizer, trainloader, model, criterion):
     return model, running_loss / len(trainloader), train_acc
 
 
+# Validation process
 def validation_process(criterion, testloader, model):
     accuracy = 0
     running_loss = 0
@@ -43,8 +44,8 @@ def validation_process(criterion, testloader, model):
 
     return val_acc, val_loss, outputs
 
-
-def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion):
+# Loop over each epoch and generate graph
+def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     optimizer = torch.optim.Adam(model.parameters(), lr=learn_rate)
     loss_list_train = []
     loss_list_test = []
@@ -76,7 +77,7 @@ def eachfolder(model, num_epochs, learn_rate, trainloader, testloader, criterion
     plt.show()
     return model, loss
 
-
+# Test our trained model on test data
 def final_test(model):
     model.eval()
     test_set = TestDataLoader(test_images, test_labels)
@@ -106,7 +107,7 @@ def prepare():
     val_set = ValidationLoader(train_images , train_labels)
     trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
     testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
-    model, test_loss = eachfolder(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
+    model, test_loss = entry(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
     final_test(model)
     return model
 

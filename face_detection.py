@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import dlib
 
+# Face detection method, use Haar or HoG
 def detect_face(path, cas_model):
     path = path + '/*.png'
     hogFaceDetector = dlib.get_frontal_face_detector()
@@ -32,6 +33,7 @@ def detect_face(path, cas_model):
 
 if __name__ == '__main__':
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    # Create directory for our detected small image
     if not os.path.exists('./CK+small'):
         os.makedirs('./CK+small')
         os.makedirs('./CK+small/anger')

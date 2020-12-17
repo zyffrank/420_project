@@ -2,8 +2,9 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 
-
+# Data loader for Pytorch training process
 # https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+# Load test data
 class TestDataLoader(Dataset):
     def __init__(self, input_images, output):
         self.input_images = input_images
@@ -20,6 +21,7 @@ class TestDataLoader(Dataset):
         image = self.transform(image)
         return [image, output]
 
+# Load training data
 class TrainLoader(Dataset):
     def __init__(self, input_images, output):
 
@@ -37,6 +39,7 @@ class TrainLoader(Dataset):
         image = self.transform(image)
         return [image, output]
 
+# Load validation data
 class ValidationLoader(Dataset):
     def __init__(self, input_images, output):
         self.input_images = input_images[0:100]
