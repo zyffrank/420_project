@@ -75,7 +75,7 @@ class ResAdd(nn.Module):
         self.res3 = ResidualBlockAdd()
         self.res4 = ResidualBlockAdd()
         self.res5 = ResidualBlockAdd()
-        self.linear = nn.Linear(400, 7)
+        self.linear = nn.Linear(144, 7)
         self.soft = nn.Softmax(dim = 1)
 
     def forward(self, x):

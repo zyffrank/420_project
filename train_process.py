@@ -107,14 +107,12 @@ def prepare():
     val_set = ValidationLoader(train_images , train_labels)
     trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
     testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
-    model, test_loss = entry(ConvNet(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
+    model, test_loss = entry(ResAdd(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
     final_test(model)
     return model
 
 
 if __name__ == '__main__':
-    model = ConvNet()
-    print(model)
 
     #https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
     train_images = np.load('./numpy/train_images.npy')

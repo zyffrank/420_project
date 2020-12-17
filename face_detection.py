@@ -10,20 +10,20 @@ def detect_face(path, cas_model):
     hogFaceDetector = dlib.get_frontal_face_detector()
     for file in glob.glob(path):
         img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
-        # faces = cas_model.detectMultiScale(img)
+        faces = cas_model.detectMultiScale(img)
         # scaleFactor: Parameter specifying how much the image size is reduced at each image scale.
         # Parameter specifying how many neighbors each candidate rectangle should have to retain it
-        faces = hogFaceDetector(img, 1)
-        for (i, rect) in enumerate(faces):
-            x = rect.left()
-            y = rect.top()
-            w = rect.right() - x
-            h = rect.bottom() - y
-            img = img[y:y + h, x:x + w]
-            break
-        # for (x, y, w, h) in faces:
+        # faces = hogFaceDetector(img, 1)
+        # for (i, rect) in enumerate(faces):
+        #     x = rect.left()
+        #     y = rect.top()
+        #     w = rect.right() - x
+        #     h = rect.bottom() - y
         #     img = img[y:y + h, x:x + w]
         #     break
+        for (x, y, w, h) in faces:
+            img = img[y:y + h, x:x + w]
+            break
 
         img = cv2.GaussianBlur(img, (9, 9), 0)
         img = cv2.resize(img, (50, 50))
