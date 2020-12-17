@@ -41,12 +41,12 @@ def stack():
 if __name__ == '__main__':
     dir = "CK+small"
     train_imgs_data, train_labels_data, val_imgs_data, val_labels_data = stack()
-    if not os.path.exists('./numpy_data'):
-        os.makedirs('./numpy_data')
-    np.save('./numpy_data/train_images.npy', train_imgs_data)
-    np.save('./numpy_data/train_labels.npy', train_labels_data)
-    np.save('./numpy_data/test_images.npy', val_imgs_data)
-    np.save('./numpy_data/test_labels.npy', val_labels_data)
+    if not os.path.exists('./numpy'):
+        os.makedirs('./numpy')
+    np.save('./numpy/train_images.npy', train_imgs_data)
+    np.save('./numpy/train_labels.npy', train_labels_data)
+    np.save('./numpy/test_images.npy', val_imgs_data)
+    np.save('./numpy/test_labels.npy', val_labels_data)
 
 
 
