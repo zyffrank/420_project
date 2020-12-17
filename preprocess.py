@@ -5,37 +5,34 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 
-def readImage(path, label):
-    images = []
-    labels = []
-    path = path + '/*.png'
-    for file in glob.glob(path):
-        img = cv.imread(file, cv.IMREAD_GRAYSCALE)
-        images.append(img)
-        labels.append(label)
-    return np.array(images), np.array(labels)
-
 def stack():
     lists = ['anger', 'disgust', 'fear', 'happy', 'sadness', 'surprise', 'contempt']
     actual_list = [os.path.join('CK+small', lists[i]) for i in range(len(lists))]
-    anger_imgs, anger_labels = readImage(actual_list[0], 0)
-    comtempt_imgs, comtempt_labels = readImage(actual_list[1], 1)
-    disgust_imgs, disgust_labels = readImage(actual_list[2], 2)
-    fear_imgs, fear_labels = readImage(actual_list[3], 3)
-    happy_imgs, happy_labels = readImage(actual_list[4], 4)
-    sad_imgs, sad_labels = readImage(actual_list[5], 5)
-    surprise_imgs, surprise_labels = readImage(actual_list[6], 6)
-
-    imgs_data = np.vstack((anger_imgs, comtempt_imgs, disgust_imgs,
-                           fear_imgs, happy_imgs, sad_imgs, surprise_imgs))
-    labels_data = np.hstack((anger_labels, comtempt_labels, disgust_labels, fear_labels, happy_labels, sad_labels,
-                             surprise_labels))
-
-
-    train_imgs_data, val_imgs_data,train_labels_data , val_labels_data = train_test_split(imgs_data, labels_data, test_size=60)
+    image = []
+    label = []
+    for i in range(7):
+        temp_img, temp_label = readImage(actual_list[i], i)
+        image.append(np.array(temp_img))
+        label.append(np.array(temp_label))
+    images = image[0]
+    for j in range(1, 7):
+        images = np.concatenate((images, image[j]), axis=0)
+    labels = np.hstack((label[0], label[1], label[2], label[3], label[4], label[5], label[6]))
+    train_imgs_data, val_imgs_data,train_labels_data , val_labels_data = train_test_split(images, labels, test_size=60)
     return train_imgs_data, train_labels_data, val_imgs_data, val_labels_data
 
 
+def readImage(path, count):
+    images = []
+    labels = []
+    path = path + '/*.png'
+    f = glob.glob(path)
+    for file in f:
+        image = cv.imread(file)
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+        images.append(image)
+        labels.append(count)
+    return images, labels
 
 
 if __name__ == '__main__':
