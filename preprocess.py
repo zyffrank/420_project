@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 
+# label all images from 0 to 6 and distribute the images set to train and validation set
 def stack():
     lists = ['anger', 'disgust', 'fear', 'happy', 'sadness', 'surprise', 'contempt']
     actual_list = [os.path.join('CK+small', lists[i]) for i in range(len(lists))]
