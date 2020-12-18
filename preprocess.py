@@ -26,17 +26,17 @@ def stack():
 
 # label all images from 0 to 6
 # study from https://stackoverflow.com/questions/49537604/how-to-read-multiple-images-from-multiple-folders-in-python
-def readAndLabel(path, type):
-    folders = glob.glob(path)
-    images = []
-    labels = []
+def readAndLabel(file_name, type):
+    folders = glob.glob(file_name)
+    emotion_image = []
+    emotion_label = []
     for folder in folders:
         for file in glob.glob(folder + '/*.png'):
             image = cv2.imread(file)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            images.append(image)
-            labels.append(type)
-    return images, labels
+            emotion_image.append(image)
+            emotion_label.append(type)
+    return emotion_image, emotion_label
 
 
 if __name__ == '__main__':
