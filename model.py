@@ -42,7 +42,7 @@ class ConvNet(nn.Module):
         out = self.soft(out)
         return out
 
-
+# https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
 # Main block of our residual networks
 class ResidualBlockAdd(nn.Module):
     def __init__(self):

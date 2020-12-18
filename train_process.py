@@ -124,4 +124,5 @@ if __name__ == '__main__':
     num_epochs = 40
     learning_rate = 0.0002
 
+
     models_store = prepare()
