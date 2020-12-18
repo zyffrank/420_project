@@ -1,8 +1,8 @@
-import glob
-import cv2
-from PIL import Image
-import os
 import dlib
+import cv2
+import os
+import glob
+from PIL import Image
 
 
 # Face detection method, use Haar or HoG
@@ -10,7 +10,8 @@ def detect_face(path, cas_model):
     path = path + '/*.png'
     hogFaceDetector = dlib.get_frontal_face_detector()
     for file in glob.glob(path):
-        img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
+        img = cv2.imread(file)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = cas_model.detectMultiScale(img)
         # scaleFactor: Parameter specifying how much the image size is reduced at each image scale.
         # Parameter specifying how many neighbors each candidate rectangle should have to retain it
@@ -25,8 +26,7 @@ def detect_face(path, cas_model):
         for (x, y, w, h) in faces:
             img = img[y:y + h, x:x + w]
             break
-
-        img = cv2.GaussianBlur(img, (9, 9), 0)
+        img = cv2.GaussianBlur(img, (5, 5), 1)
         img = cv2.resize(img, (50, 50))
         save_path = file.replace('CK+', 'CK+small')
         Image.fromarray(img, 'L').save(save_path)
