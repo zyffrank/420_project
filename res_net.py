@@ -29,9 +29,6 @@ class BasicBlock(nn.Module):
         return out
 
 
-
-
-
 class ResNet(nn.Module):
     def __init__(self, block, num_blocks, num_classes=7):
         super(ResNet, self).__init__()

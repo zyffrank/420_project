@@ -1,5 +1,6 @@
 import torch.nn as nn
 
+
 # Simple convolutional neural network
 class ConvNet(nn.Module):
     def __init__(self):

@@ -21,6 +21,7 @@ class TestDataLoader(Dataset):
         image = self.transform(image)
         return [image, output]
 
+
 # Load training data
 class TrainLoader(Dataset):
     def __init__(self, input_images, output):
@@ -39,12 +40,14 @@ class TrainLoader(Dataset):
         image = self.transform(image)
         return [image, output]
 
+
 # Load validation data
 class ValidationLoader(Dataset):
     def __init__(self, input_images, output):
         self.input_images = input_images[0:200]
         self.output = output[0:200]
         self.transform = transforms.ToTensor()
+
     def __len__(self):
         return len(self.input_images)
 
