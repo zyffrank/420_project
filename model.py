@@ -53,7 +53,7 @@ class ResidualBlockAdd(nn.Module):
         self.conv2 = nn.Conv2d(16, 16, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(16)
         self.relu2 = nn.ReLU()
-        self.pool1 = nn.MaxPool2d(kernel_size=2, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=2, padding=1)
 
     def forward(self, x):
         out = self.conv1(x)
@@ -63,7 +63,7 @@ class ResidualBlockAdd(nn.Module):
         out = self.bn2(out)
         out = out + x
         out = self.relu2(out)
-        out = self.pool1(out)
+        out = self.pool(out)
         return out
 
 
