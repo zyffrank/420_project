@@ -10,38 +10,39 @@ import torch.nn as nn
 # Main training process
 def train(epoch, optimizer, trainloader, model, criterion):
     model.train()
-    total_loss = 0
     total_right = 0
+    total_loss = 0
     for images, labels in trainloader:
         optimizer.zero_grad()
-        outputs = model(images)
-        loss = criterion(outputs, labels)
+        output = model(images)
+        loss = criterion(output, labels)
         loss.backward()
         optimizer.step()
-        predict = torch.argmax(outputs, dim = 1)
+        predict = torch.argmax(output, dim=1)
         equals = torch.eq(labels, predict).type(torch.FloatTensor)
         total_right += torch.mean(equals)
         total_loss += loss.item()
-    accuracy = total_right / len(trainloader)
-    print('Training: Epoch %d Loss: %.4f, Accuracy: %.4f' % (
-        epoch + 1, total_loss / len(trainloader), accuracy))
-    return model, total_loss / len(trainloader), accuracy
+    accuracy = total_right/len(trainloader)
+    loss = total_loss/len(trainloader)
+    epoch += 1
+    print('Training process: Epoch {}, Accuracy {}, Loss {}'.format(str(epoch), str(accuracy), str(loss)))
+    return model, loss, accuracy
 
 
 # Validation process
 def validation_process(criterion, testloader, model):
     total_right = 0
     total_loss = 0
+    total = len(testloader)
     for images, labels in testloader:
-        outputs = model(images)
-        loss = criterion(outputs, labels)
-        predict_label = torch.argmax(outputs, dim = 1)
+        output = model(images)
+        loss = criterion(output, labels)
+        predict_label = torch.argmax(output, dim=1)
         equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
         total_right += torch.mean(equals)
         total_loss += loss.item()
-    loss = total_loss / len(testloader)
-    accuracy = total_right / len(testloader)
-
+    accuracy = total_right/total
+    loss = total_loss/total
     return accuracy, loss
 
 
@@ -52,26 +53,27 @@ def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     loss_list_test = []
     acc_list_train = []
     acc_list_test = []
-    epoch_list = range(1,num_epochs+1)
+    epoch_list = range(1, num_epochs+1)
     for epoch in range(num_epochs):
         model, loss, acc = train(epoch, optimizer, trainloader, model, criterion)
         model.eval()
-        val_acc, val_loss= validation_process(criterion, testloader, model)
-        print('Validation: Epoch %d, Loss: %.4f, Accuracy: %.4f' % (
-            epoch + 1, val_loss, val_acc))
-        epoch_loss = val_loss
+        validation_accuracy, validation_loss = validation_process(criterion, testloader, model)
+        epoch_count = epoch + 1
+        print('Validation process: Epoch {}, Accuracy {}, Loss: {}'.format(str(epoch_count), str(validation_accuracy),
+                                                                           str(validation_loss)))
+        epoch_loss = validation_loss
         loss_list_train += [loss]
         loss_list_test += [epoch_loss]
         acc_list_train += [acc]
-        acc_list_test += [val_acc]
-    train1, = plt.plot(epoch_list,[item for item in loss_list_train],  label = "Train loss")
-    validation,  = plt.plot(epoch_list,[item for item in loss_list_test],  label = "Validation loss")
+        acc_list_test += [validation_accuracy]
+    train1, = plt.plot(epoch_list, [item for item in loss_list_train],  label="Train loss")
+    validation,  = plt.plot(epoch_list, [item for item in loss_list_test],  label="Validation loss")
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend([train1, validation], ['Loss of training process', 'Loss of validation process'])
     plt.show()
-    train1, = plt.plot(epoch_list,[item for item in acc_list_train],  label = "Train accuracy")
-    validation,  = plt.plot(epoch_list,[item for item in acc_list_test],  label = "Validation accuracy")
+    train1, = plt.plot(epoch_list, [item for item in acc_list_train],  label="Train accuracy")
+    validation,  = plt.plot(epoch_list, [item for item in acc_list_test],  label="Validation accuracy")
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.legend([train1, validation], ['Accuracy of training process', 'Accuracy of validation process'])
@@ -89,7 +91,7 @@ def final_test(model):
     for images, labels in test_loader:
         outputs = model(images)
         loss = criterion(outputs, labels)
-        predict_label = torch.argmax(outputs, dim = 1)
+        predict_label = torch.argmax(outputs, dim=1)
         equals = torch.eq(labels, predict_label).type(torch.FloatTensor)
         # if torch.mean(equals) == 0:
         #     image = torch.Tensor.numpy(images)
@@ -97,17 +99,16 @@ def final_test(model):
         #     plt.imshow(image[0][0])
         #     plt.show()
         num_right += torch.mean(equals)
-    accuracy = num_right / len(test_loader)
-    print("test accuracy")
-    print(accuracy)
+    accuracy = num_right/len(test_loader)
+    print("test accuracy: " + str(accuracy))
 
 
 def prepare():
-    train_set = TrainLoader(train_images, train_labels)
-    val_set = ValidationLoader(train_images, train_labels)
-    trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
-    testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
-    model= entry(ResAdd(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
+    training = TrainLoader(train_images, train_labels)
+    validation = ValidationLoader(train_images, train_labels)
+    train_data_loader = torch.utils.data.DataLoader(training, 50, shuffle=True)
+    test_data_loader = torch.utils.data.DataLoader(validation, 10, shuffle=True)
+    model = entry(ResAdd(), num_epochs, learning_rate, train_data_loader, test_data_loader, nn.CrossEntropyLoss())
     final_test(model)
     return model
 
@@ -121,6 +122,4 @@ if __name__ == '__main__':
 
     num_epochs = 40
     learning_rate = 0.0002
-
-
     models_store = prepare()
