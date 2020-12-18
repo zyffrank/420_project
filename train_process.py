@@ -1,10 +1,10 @@
 import numpy as np
-import torch
-import torch.nn as nn
 from model import ConvNet, ResAdd
 from data_loader import TrainLoader, TestDataLoader, ValidationLoader
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
 
 
 # Main training process
@@ -105,8 +105,8 @@ def final_test(model):
 
 
 def prepare():
-    train_set = TrainLoader(train_images , train_labels)
-    val_set = ValidationLoader(train_images , train_labels)
+    train_set = TrainLoader(train_images, train_labels)
+    val_set = ValidationLoader(train_images, train_labels)
     trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
     testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
     model, test_loss = entry(ResAdd(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
