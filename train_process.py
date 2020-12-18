@@ -76,7 +76,7 @@ def entry(model, num_epochs, learn_rate, trainloader, testloader, criterion):
     plt.ylabel('Accuracy')
     plt.legend([train1, validation], ['Accuracy of training process', 'Accuracy of validation process'])
     plt.show()
-    return model, loss
+    return model
 
 
 # Test our trained model on test data
@@ -109,7 +109,7 @@ def prepare():
     val_set = ValidationLoader(train_images, train_labels)
     trainloader = torch.utils.data.DataLoader(train_set, 50, shuffle=True)
     testloader = torch.utils.data.DataLoader(val_set, 10, shuffle=True)
-    model, test_loss = entry(ResAdd(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
+    model= entry(ResAdd(), num_epochs, learning_rate, trainloader, testloader, nn.CrossEntropyLoss())
     final_test(model)
     return model
 
