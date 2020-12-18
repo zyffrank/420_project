@@ -85,8 +85,7 @@ def final_test(model):
     test_set = TestDataLoader(test_images, test_labels)
     test_loader = torch.utils.data.DataLoader(test_set)
     criterion = nn.CrossEntropyLoss()
-    accuracy = 0
-    running_loss = 0
+    num_right = 0
     for images, labels in test_loader:
         outputs = model(images)
         loss = criterion(outputs, labels)
@@ -97,9 +96,8 @@ def final_test(model):
         #     print(labels)
         #     plt.imshow(image[0][0])
         #     plt.show()
-        accuracy += torch.mean(equals)
-        running_loss += loss.item()
-    accuracy /= len(test_loader)
+        num_right += torch.mean(equals)
+    accuracy = num_right / len(test_loader)
     print("test accuracy")
     print(accuracy)
 
