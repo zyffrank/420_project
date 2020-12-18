@@ -22,7 +22,8 @@ class TestDataLoader(Dataset):
 # Load training data
 class TrainLoader(Dataset):
     def __init__(self, images, label):
-        self.images, self.labels = images[200:], label[200:]
+        self.images = images[200:]
+        self.labels = label[200:]
         self.transform = transforms.ToTensor()
 
     def __len__(self):
