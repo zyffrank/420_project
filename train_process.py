@@ -121,7 +121,7 @@ if __name__ == '__main__':
     test_labels = np.load('./numpy/test_labels.npy')
 
     num_epochs = 40
-    learning_rate = 0.0001
+    learning_rate = 0.0002
 
 
     models_store = prepare()
